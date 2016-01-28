@@ -1,0 +1,18 @@
+To compile and run the program:
+make clean;make
+./a3 M T sort
+where M is the number of threads per block, T is the number of tasks and sort is the option to add tasks to random sms(sort=0) or specific sms(sort=1)
+
+
+A dynamic abstraction for bag of tasks was created where tasks can be added to the GPU while the kernel is running.
+On the GPU side,
+The thread iterates for as long as the global counter F is lesser than T in the scheduler and picks out tasks as required.
+On the CPU side, 
+The done vector is copied asynchronously which determines whether an sm has completed all its tasks. If so, the sm is assigned any remaining tasks. The program breaks from the loop if all tasks have been assigned and completed.
+
+On running the program with random and sorted tasks, it was observed that on most runs, the sorted tasks gave lesser time than that of the random assignments of tasks. Also , most of the time the sm that completes first is sm0 becasue of which remaining tasks are assigned to that sm.
+The count array shows that the threads of queues that completed earlier have larger poll counts and done count represented the number of tasks completed by this gpu thread.
+
+Important!!
+There should be a minimum of 6 tasks T=6.
+The maximum number of tasks is 10,000
